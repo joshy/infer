@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Report Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
+  {{ dropzone.load_css() }}
+  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+</head>
+
+<body class="w-100 sans-serif">
+   {% include 'partials/header.html' %}
+
+
+   <h1>Photo Upload</h1>
+   <form method="POST" enctype="multipart/form-data">
+       {{ form.hidden_tag() }}
+       {{ form.photo }}
+       {% for error in form.photo.errors %}
+           <span style="color: red;">{{ error }}</span>
+       {% endfor %}
+       {{ form.submit }}
+   </form>
+
+   {% if file_url %}
+   <br>
+   <img src="{{ file_url }}">
+   {% endif %}
+
+   {{ dropzone.load_js() }}
+
+   {{ dropzone.create(action='/uploads') }}
+   {{ dropzone.config() }}
+</body>
+</html>
