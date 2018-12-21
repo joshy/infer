@@ -1,48 +1,52 @@
 import os
-from flask import Flask, render_template, request
-from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import SubmitField
 
+import numpy as np
+from flask import Flask, redirect, render_template, request, session, url_for
 from flask_dropzone import Dropzone
-
+from keras.models import load_model
+from keras.preprocessing.image import img_to_array, load_img
+from PIL import Image
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'I have a dream'
-app.config['UPLOADED_PHOTOS_DEST'] = './uploads'
+model = None
+
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/897'
+app.config.update(
+    UPLOADED_PATH="./uploads",
+    # Flask-Dropzone config:
+    DROPZONE_ALLOWED_FILE_TYPE="image",
+    DROPZONE_MAX_FILE_SIZE=3,
+    DROPZONE_MAX_FILES=1,
+    DROPZONE_REDIRECT_VIEW="main",
+)
 
 dropzone = Dropzone(app)
 
 
-photos = UploadSet('photos', IMAGES)
-configure_uploads(app, photos)
-patch_request_class(app)  # set maximum file size, default is 16MB
+def preload_model():
+    global model
+    model = load_model("./model/ap_lat_model.h5")
+    # https://github.com/keras-team/keras/issues/6462
+    model._make_predict_function()
 
 
-class UploadForm(FlaskForm):
-    photo = FileField(validators=[FileAllowed(photos, u'Image only!'), FileRequired(u'File was empty!')])
-    submit = SubmitField(u'Upload')
+@app.route("/", methods=["POST", "GET"])
+def main():
+    filename = session.get("filename")
+    orientation = None
+    if filename:
+        image = load_img(os.path.join("infer/static/uploads", filename))
+        image = img_to_array(image)
+        image = np.expand_dims(image, axis=0)
+        preds = model.predict(image)
+        orientation = "lat" if preds[0][0] == 1.0 else "ap"
+    return render_template("index.html", file_url=filename, orientation=orientation)
 
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    form = UploadForm()
-    if form.validate_on_submit():
-        filename = photos.save(form.photo.data)
-        file_url = photos.url(filename)
-    else:
-        file_url = None
-    return render_template('index.html', form=form, file_url=file_url)
-
-
-
-
-@app.route('/uploads', methods=['GET', 'POST'])
-def upload():
-
-    if request.method == 'POST':
-        f = request.files.get('file')
-        f.save(os.path.join('./uploads', f.filename))
-
-    return 'upload template'
+@app.route("/uploads", methods=["GET", "POST"])
+def uploads():
+    if request.method == "POST":
+        f = request.files.get("file")
+        f.save(os.path.join("infer/static/uploads", f.filename))
+        session["filename"] = f.filename
+    return redirect(url_for("main"))

@@ -1,35 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Report Server</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
-  {{ dropzone.load_css() }}
-  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+    <title>Image orientation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <style>
+        html, body, pre, code, kbd, samp {
+            font-family: "Press Start 2P";
+        }
+        </style>
+    {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%;') }}
 </head>
 
-<body class="w-100 sans-serif">
-   {% include 'partials/header.html' %}
+<body class="w-100 mt3">
+    <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
+    <div class="w-100 b--black-10 mw8 center ">
+        <div class="nes-container with-title mt4">
+            <h1 class="w-100 mw8 title">X-Ray image upload</h1>
+            <p>This is a simple experiment to test inference on a model to decide
+                if a x-ray of the wrist is AP view or LAT view.
+            </p>
+        </div>
 
+        {% if file_url %}
+        <div class="nes-container with-title mt4">
+            <h1 class="w-100 mw8 title">Image orientation</h1>
 
-   <h1>Photo Upload</h1>
-   <form method="POST" enctype="multipart/form-data">
-       {{ form.hidden_tag() }}
-       {{ form.photo }}
-       {% for error in form.photo.errors %}
-           <span style="color: red;">{{ error }}</span>
-       {% endfor %}
-       {{ form.submit }}
-   </form>
+            <p>The inferred image orientation is: </p>
 
-   {% if file_url %}
-   <br>
-   <img src="{{ file_url }}">
-   {% endif %}
+            <label>
+                <input type="checkbox" class="nes-checkbox" {% if 'ap' == orientation %} checked {% endif %}>
+                <span>AP</span>
+            </label>
+            <label>
+                <input type="checkbox" class="nes-checkbox" {% if 'lat' == orientation %} checked {% endif %}>
+                <span>LAT</span>
+            </label>
+            <img class="from-right" src="static/uploads/{{ file_url }}" height="240px">
+        </div>
+        {% endif %}
 
-   {{ dropzone.load_js() }}
+        {{ dropzone.load_js() }}
 
-   {{ dropzone.create(action='/uploads') }}
-   {{ dropzone.config() }}
+        {{ dropzone.create(action='/uploads') }}
+        {{ dropzone.config() }}
+    </div>
 </body>
+
 </html>
