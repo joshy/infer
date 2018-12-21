@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Image orientation</title>
+    <title>Image projection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
@@ -20,32 +20,29 @@
     <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
     <div class="w-100 b--black-10 mw8 center ">
         <div class="nes-container with-title mt4">
-            <h1 class="w-100 mw8 title">X-Ray image upload</h1>
-            <p>This is a simple experiment to test inference on a model to decide
-                if a x-ray of the wrist is AP view or LAT view.
+            <h1 class="w-100 mw8 title">x-ray image projection</h1>
+            <p>This is a simple experiment to test inference on a machine learning model to decide
+                if an x-ray of the wrist is a AP or LAT projection.
             </p>
         </div>
 
         {% if file_url %}
-        <div class="nes-container with-title mt4">
-            <h1 class="w-100 mw8 title">Image orientation</h1>
-
-            <p>The inferred image orientation is: </p>
-
-            <label>
-                <input type="checkbox" class="nes-checkbox" {% if 'ap' == orientation %} checked {% endif %}>
-                <span>AP</span>
-            </label>
-            <label>
-                <input type="checkbox" class="nes-checkbox" {% if 'lat' == orientation %} checked {% endif %}>
-                <span>LAT</span>
-            </label>
-            <img class="from-right" src="static/uploads/{{ file_url }}" height="240px">
-        </div>
+            <div class="nes-container with-title mt4">
+                <h1 class="w-100 mw8 title">Prediction</h1>
+                <p>The inferred image projection is: </p>
+                <label>
+                    <input type="checkbox" class="nes-checkbox" {% if 'ap' == orientation %} checked {% endif %} disabled>
+                    <span>AP</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox" {% if 'lat' == orientation %} checked {% endif %} disabled>
+                    <span>LAT</span>
+                </label>
+                <img class="from-right" src="static/uploads/{{ file_url }}" height="240px" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+            </div>
         {% endif %}
 
         {{ dropzone.load_js() }}
-
         {{ dropzone.create(action='/uploads') }}
         {{ dropzone.config() }}
     </div>
