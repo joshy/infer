@@ -1,0 +1,7 @@
+.dropzone.dz-clickable {
+    cursor: url(https://unpkg.com/nes.css/assets/cursor-click.png),pointer;
+}
+
+.dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+    cursor: url(https://unpkg.com/nes.css/assets/cursor-click.png),pointer;
+}

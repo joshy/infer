@@ -17,6 +17,7 @@ daiquiri.setup(level=logging.DEBUG,
             max_size_bytes=10000000)
     ))
 
-from infer.app import app, preload_model
-preload_model()
+from infer.app import app
+from infer.infer import preload_models
+preload_models()
 app.run(host='0.0.0.0', port=5555)

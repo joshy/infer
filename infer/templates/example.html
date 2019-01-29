@@ -5,8 +5,9 @@
     <title>Image projection</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nes.min.css') }}">
+
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
     <style>
         html, body, pre, code, kbd, samp {
             font-family: "Press Start 2P";
@@ -14,6 +15,7 @@
         </style>
     {{ dropzone.load_css() }}
     {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%;') }}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
 </head>
 
 <body class="w-100 mt3">
@@ -31,6 +33,7 @@
                 <h1 class="w-100 mw8 title">Prediction</h1>
                 <p>The inferred image projection is: </p>
                 <label>
+
                     <input type="checkbox" class="nes-checkbox" {% if 'ap' == orientation %} checked {% endif %} disabled>
                     <span>AP</span>
                 </label>
@@ -38,7 +41,7 @@
                     <input type="checkbox" class="nes-checkbox" {% if 'lat' == orientation %} checked {% endif %} disabled>
                     <span>LAT</span>
                 </label>
-                <img class="from-right" src="static/uploads/{{ file_url }}" height="240px" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+                <img class="from-right" src="../../static/uploads/{{ file_url }}" height="240px" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
             </div>
         {% endif %}
 
