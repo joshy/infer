@@ -108,3 +108,6 @@ uploads
 
 .vscode
 model/*.h5
+
+
+results/*

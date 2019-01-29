@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import numpy as np
 from keras.models import load_model
 
@@ -35,3 +38,8 @@ def predict_lat_fracture(image):
     image = np.expand_dims(image, axis=0)
     pred = lat_fracture_model.predict(image)
     return pred[0][0]
+
+def save_result(data):
+    filename = Path("results", data["key"]).with_suffix(".json")
+    with open(filename, 'w') as outfile:
+        json.dump(data, outfile)
