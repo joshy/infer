@@ -13,8 +13,10 @@ from infer.results import list
 # Use cpu, gpu is no nedded for inference
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-app = Flask(__name__)
-
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object('infer.default_config')
+app.config.from_pyfile('config.cfg')
+version = app.config['VERSION'] = '0.0.1'
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/897'
 app.config.update(
@@ -33,6 +35,11 @@ dropzone = Dropzone(app)
 def main():
     results = list()
     return render_template("index.html", results=results)
+
+
+@app.route("/overview")
+def overview():
+    return render_template("overview.html")
 
 
 @app.route("/example/view", methods=["POST", "GET"])
