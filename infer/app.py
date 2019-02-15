@@ -2,21 +2,26 @@ import os
 from pathlib import Path
 
 import numpy as np
-from flask import Flask, jsonify, redirect, render_template, request, session, url_for
+from flask import (Flask, jsonify, redirect, render_template, request, session,
+                   url_for)
 from flask_dropzone import Dropzone
 from keras.preprocessing.image import img_to_array, load_img
+from orthanc_rest_client import Orthanc
 
 from infer.convert import convert
 from infer.image import save
-from infer.infer import predict_ap_fracture, predict_lat_fracture, predict_view, save_result
+from infer.infer import (predict_ap_fracture, predict_lat_fracture,
+                         predict_view, save_result)
 from infer.results import list
+import orthanc.wrist as wrist
+
 # Use cpu, gpu is no nedded for inference
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('infer.default_config')
-app.config.from_pyfile('config.cfg')
-version = app.config['VERSION'] = '0.0.1'
+app.config.from_object("infer.default_config")
+app.config.from_pyfile("config.cfg")
+version = app.config["VERSION"] = "0.0.1"
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/897'
 app.config.update(
@@ -31,11 +36,35 @@ app.config.update(
 dropzone = Dropzone(app)
 
 
+orthanc = Orthanc("http://localhost:8042")
+
+
 @app.route("/")
 def main():
     results = list()
     return render_template("index.html", results=results)
 
+
+@app.route("/t")
+def t():
+    r = wrist.find_wrist_studies(orthanc)
+    print(r)
+    print(type(r))
+    print('-------------------')
+    print(r[0])
+    print('-------------------')
+
+    return render_template("orthanc.html", results=r)
+
+
+@app.route("/study")
+def s():
+    study_id = request.args.get("id", "")
+    if not study_id:
+        return 400, "no study id given"
+    study, series = wrist.find_wrist_study(orthanc, study_id)
+    print(series[0])
+    return render_template("study.html", study=study, series=series)
 
 @app.route("/overview")
 def overview():

@@ -21,27 +21,19 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="w-100 mt3">
+<body class="w-100 mt3 nes-container is-dark">
     <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
     <div class="w-100 b--black-10 mw8 center ">
-        <div class="nes-container with-title mt4">
+        <div class="nes-container is-dark with-title mt4">
             <h1 class="w-100 mw8 title">x-ray image projection</h1>
             <p>This is a wrist fracture detector.
             </p>
         </div>
 
         {% for r in results %}
-        <div class="nes-container with-title mt4">
-            <h1 class="w-100 mw8 title">{{ r["patient_id"]}} - {{r["accession_number"]}} - {{r["series_number"]}}</h1>
-
-            <div class="containers">
-                <img src="../../../static/uploads/{{ r['image'] }}" height="240px" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
-
-                <div class="nes-container fr">
-                    <div>Fracture probability: {{r["fracture"] | float | round(3)}}</div>
-                    <div>View (inferred): {{r["view"].upper()}}</div>
-                </div>
-            </div>
+        <div class="nes-container is-dark with-title mt4">
+            <a href="/study?id={{r.ID}}">{{r.MainDicomTags.AccessionNumber}} -
+                {{r.MainDicomTags.StudyDescription}}</a>
         </div>
         {% endfor %}
     </div>

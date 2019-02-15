@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wrist fracture</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nes.min.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <style>
+        html,
+        body,
+        pre,
+        code,
+        kbd,
+        samp {
+            font-family: "Press Start 2P";
+        }
+    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="w-100 mt3 nes-container is-dark">
+    <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
+    <div class="w-100 b--black-10 mw8 center ">
+        <div class="nes-container is-dark with-title mt4">
+            <h1 class="w-100 mw8 title">Study information</h1>
+            <ul class="nes-list is-circle">
+                <li>PatientID: {{study.PatientMainDicomTags.PatientID}}</li>
+                <li>AccessionNumber: {{study.MainDicomTags.AccessionNumber}}</li>
+                <li>StudyDate: {{study.MainDicomTags.StudyDate}}</li>
+            </ul>
+            <p>Only CR Images are shown!</p>
+        </div>
+
+        {% for s in series if s.MainDicomTags.Modality == "CR"%}
+        <div class="nes-container is-dark with-title mt4">
+
+            <ul class="nes-list is-circle">
+                <li>SeriesNumber: {{s.MainDicomTags.SeriesNumber}}</li>
+                <li>SeriesDescription: {{s.MainDicomTags.SeriesDescription}}</li>
+            </ul>
+            <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="512" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
