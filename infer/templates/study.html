@@ -31,18 +31,26 @@
                 <li>AccessionNumber: {{study.MainDicomTags.AccessionNumber}}</li>
                 <li>StudyDate: {{study.MainDicomTags.StudyDate}}</li>
             </ul>
-            <p>Only CR Images are shown!</p>
         </div>
 
-        {% for s in series if s.MainDicomTags.Modality == "CR"%}
-        <div class="nes-container is-dark with-title mt4">
-
-            <ul class="nes-list is-circle">
-                <li>SeriesNumber: {{s.MainDicomTags.SeriesNumber}}</li>
-                <li>SeriesDescription: {{s.MainDicomTags.SeriesDescription}}</li>
-            </ul>
-            <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="512" style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
-        </div>
+        {% for s in series %}
+            {% if s.MainDicomTags.Modality == "CR" %}
+            <div class="nes-container is-dark with-title mt4">
+                <ul class="nes-list is-circle">
+                    <li>SeriesNumber: {{s.MainDicomTags.SeriesNumber}}</li>
+                    <li>SeriesDescription: {{s.MainDicomTags.SeriesDescription}}</li>
+                </ul>
+                <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="512"
+                    style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+            </div>
+            {% else %}
+            <div class="nes-container is-dark with-title mt4">
+                <ul class="nes-list is-circle">
+                    <li>SeriesNumber: {{s.MainDicomTags.SeriesNumber}}</li>
+                    <li>SeriesDescription: {{s.MainDicomTags.SeriesDescription}}</li>
+                </ul>
+            </div>
+            {% endif %}
         {% endfor %}
     </div>
 </body>
