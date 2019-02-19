@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Wrist fracture</title>
+    <title>Fraktur</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/nes.min.css') }}">
@@ -25,17 +25,41 @@
     <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
     <div class="w-100 b--black-10 mw8 center ">
         <div class="nes-container is-dark with-title mt4">
-            <h1 class="w-100 mw8 title">x-ray image projection</h1>
-            <p>This is a wrist fracture detector.
+            <h1 class="w-100 mw8 title">Distale Radiusfraktur</h1>
+            <p>Dies ist ein Deep-Learning Programm zur Erkennung und Klassifizierung der distalen Radiusfraktur.
             </p>
         </div>
 
-        {% for r in results %}
+
         <div class="nes-container is-dark with-title mt4">
+            <div class="nes-table-responsive">
+                <table class="nes-table is-dark">
+                    <thead>
+                        <tr>
+                            <th>StudyDate</th>
+                            <th>AccessionNumber</th>
+                            <th>StudyDescription</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{r.MainDicomTags.StudyDate}}</td>
+                            <td>{{r.MainDicomTags.AccessionNumber}}</td>
+                            <td>{{r.MainDicomTags.StudyDescription}}</td>
+                            <td><a href="/study?id={{r.ID}}"><button type="button"
+                                        class="nes-btn is-primary">Öffnen</button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% for r in results %}
             <a href="/study?id={{r.ID}}">{{r.MainDicomTags.AccessionNumber}} -
                 {{r.MainDicomTags.StudyDescription}}</a>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </body>
 

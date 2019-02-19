@@ -40,8 +40,18 @@
                     <li>SeriesNumber: {{s.MainDicomTags.SeriesNumber}}</li>
                     <li>SeriesDescription: {{s.MainDicomTags.SeriesDescription}}</li>
                 </ul>
-                <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="512"
-                    style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+                <div style="display:flex">
+                <div class="nes-container">
+                    <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="256"
+                        style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+                </div>
+                <div class="nes-container with-title">
+                    <h4>Computed properties</h4>
+                    <div>Hardplaster: </div>
+                    <div>View: </div>
+                    <div>Fracture: </div>
+                </div>
+                </div>
             </div>
             {% else %}
             <div class="nes-container is-dark with-title mt4">

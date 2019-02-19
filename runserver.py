@@ -19,5 +19,5 @@ daiquiri.setup(level=logging.DEBUG,
 
 from infer.app import app
 from infer.infer import preload_models
-preload_models()
-app.run(host='0.0.0.0', port=5555)
+#preload_models()
+app.run(host='0.0.0.0', port=9555)

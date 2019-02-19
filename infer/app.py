@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-
+import requests
 import numpy as np
 from flask import (Flask, jsonify, redirect, render_template, request, session,
                    url_for)
@@ -8,12 +8,14 @@ from flask_dropzone import Dropzone
 from keras.preprocessing.image import img_to_array, load_img
 from orthanc_rest_client import Orthanc
 
+import orthanc.wrist as wrist
 from infer.convert import convert
-from infer.image import save
+from infer.image import retrieve, save
 from infer.infer import (predict_ap_fracture, predict_lat_fracture,
                          predict_view, save_result)
 from infer.results import list
-import orthanc.wrist as wrist
+from infer.wrist import analyze
+import json
 
 # Use cpu, gpu is no nedded for inference
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -48,12 +50,6 @@ def main():
 @app.route("/t")
 def t():
     r = wrist.find_wrist_studies(orthanc)
-    print(r)
-    print(type(r))
-    print('-------------------')
-    print(r[0])
-    print('-------------------')
-
     return render_template("orthanc.html", results=r)
 
 
@@ -63,7 +59,13 @@ def s():
     if not study_id:
         return 400, "no study id given"
     study, series = wrist.find_wrist_study(orthanc, study_id)
-    print(series[0])
+
+    for i in series:
+        if i["MainDicomTags"]["Modality"] == "CR":
+            img_array = retrieve(i.get("Instances")[0])
+            data = {"image": img_array.tolist(), "bla": "blub"}
+            r = requests.post("http://localhost:9556/inference", json=data)
+            print(r.json())
     return render_template("study.html", study=study, series=series)
 
 @app.route("/overview")
@@ -79,8 +81,7 @@ def example_view():
         image = load_img(os.path.join("infer/static/uploads", filename))
         image = img_to_array(image)
         image = np.expand_dims(image, axis=0)
-        preds = predict_view(image)
-        orientation = "lat" if preds[0][0] == 1.0 else "ap"
+        orientation = predict_view(image)
     return render_template("example.html", file_url=filename, orientation=orientation)
 
 
@@ -99,8 +100,7 @@ def infer_view():
     image, _ = save(image_file)
     image = convert(image)
     image = np.expand_dims(image, axis=0)
-    preds = predict_view(image)
-    view = "lat" if preds[0][0] == 1.0 else "ap"
+    view = predict_view(image)
     return jsonify({"view": view})
 
 
