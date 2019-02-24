@@ -1,3 +1,5 @@
 Flask
 tensorflow
 orthanc-rest-client
+flask_dropzone
+daiquiri

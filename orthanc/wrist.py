@@ -4,7 +4,7 @@ import json
 def find_wrist_studies(orthanc):
     search = {
         "Level": "Study",
-        "Query": {"PatientID": "*", "StudyDescription": "*Hand*", "PatientName": "*"},
+        "Query": {"PatientID": "*", "StudyDescription": "*Hand*", "PatientName": "*", "Modality" : "CR"},
     }
     r = orthanc.find(search)
     rrs = []

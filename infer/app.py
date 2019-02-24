@@ -2,8 +2,7 @@ import os
 from pathlib import Path
 import requests
 import numpy as np
-from flask import (Flask, jsonify, redirect, render_template, request, session,
-                   url_for)
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_dropzone import Dropzone
 from keras.preprocessing.image import img_to_array, load_img
 from orthanc_rest_client import Orthanc
@@ -11,8 +10,12 @@ from orthanc_rest_client import Orthanc
 import orthanc.wrist as wrist
 from infer.convert import convert
 from infer.image import retrieve, save
-from infer.infer import (predict_ap_fracture, predict_lat_fracture,
-                         predict_view, save_result)
+from infer.infer import (
+    predict_ap_fracture,
+    predict_lat_fracture,
+    predict_view,
+    save_result,
+)
 from infer.results import list
 from infer.wrist import analyze
 import json
@@ -65,8 +68,9 @@ def s():
             img_array = retrieve(i.get("Instances")[0])
             data = {"image": img_array.tolist(), "bla": "blub"}
             r = requests.post("http://localhost:9556/inference", json=data)
-            print(r.json())
+            i["fracture_ai"] = r.json()
     return render_template("study.html", study=study, series=series)
+
 
 @app.route("/overview")
 def overview():

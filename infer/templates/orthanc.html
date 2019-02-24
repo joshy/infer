@@ -28,14 +28,12 @@
             <h1 class="w-100 mw8 title">Distale Radiusfraktur</h1>
             <p>Dies ist ein Deep-Learning Programm zur Erkennung und Klassifizierung der distalen Radiusfraktur.
             </p>
-        </div>
 
-
-        <div class="nes-container is-dark with-title mt4">
             <div class="nes-table-responsive">
-                <table class="nes-table is-dark">
+                <table class="nes-table is-bordered is-dark">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>StudyDate</th>
                             <th>AccessionNumber</th>
                             <th>StudyDescription</th>
@@ -45,6 +43,7 @@
                     <tbody>
                         {% for r in results %}
                         <tr>
+                            <td>{{ loop.index }}</td>
                             <td>{{r.MainDicomTags.StudyDate}}</td>
                             <td>{{r.MainDicomTags.AccessionNumber}}</td>
                             <td>{{r.MainDicomTags.StudyDescription}}</td>
@@ -55,10 +54,6 @@
                     </tbody>
                 </table>
             </div>
-            {% for r in results %}
-            <a href="/study?id={{r.ID}}">{{r.MainDicomTags.AccessionNumber}} -
-                {{r.MainDicomTags.StudyDescription}}</a>
-            {% endfor %}
         </div>
     </div>
 </body>

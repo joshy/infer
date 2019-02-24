@@ -47,9 +47,13 @@
                 </div>
                 <div class="nes-container with-title">
                     <h4>Computed properties</h4>
-                    <div>Hardplaster: </div>
-                    <div>View: </div>
-                    <div>Fracture: </div>
+                    {% if s["fracture_ai"]["hardplaster"] | round(3) == 1.0 %}
+                        <div>Hardplaster: {{ s["fracture_ai"]["hardplaster"] | round(3) }}</div>
+                        <div>View: {{ s["fracture_ai"]["view"] }}</div>
+                    {% else %}
+                        <div>View: {{ s["fracture_ai"]["view"] }}</div>
+                        <div>Fracture: {{ s["fracture_ai"]["fracture"] | round(3) }}</div>
+                    {% endif %}
                 </div>
                 </div>
             </div>
