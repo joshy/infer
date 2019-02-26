@@ -1,11 +1,10 @@
+import logging
 import os
 from io import BytesIO
 from pathlib import Path
 
 import numpy as np
 import requests
-from keras.models import load_model
-from keras.preprocessing.image import img_to_array, load_img
 from PIL import Image
 
 
@@ -24,18 +23,17 @@ def retrieve(instance):
     url = f"http://localhost:8042/instances/{instance}/preview"
     response = requests.get(url)
     img = Image.open(BytesIO(response.content)).convert('RGB')
-    img = img_to_array(img)
-    print(f"Before converting got shape: {img.shape}")
+    img = np.asarray(img, dtype='float32')
+    logging.debug(f"Before converting got shape: {img.shape}")
     img = _convert(img)
-    print(f"After converting got shape: {img.shape}")
+    logging.debug(f"After converting got shape: {img.shape}")
     img = Image.fromarray(img).resize((224,224))
     img = np.array(img)
-    print(f"After resizing got shape: {img.shape}")
+    logging.debug(f"After resizing got shape: {img.shape}")
     return img
 
 
 def _convert(image):
-    print(type(image),  image.shape)
     y, x, _ = image.shape
     startx = x//2-(512//2)
     starty = y//2-(1024//2)

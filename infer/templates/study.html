@@ -42,17 +42,19 @@
                 </ul>
                 <div style="display:flex">
                 <div class="nes-container">
+                    <a href="http://localhost:8042/web-viewer/app/viewer.html?series={{s.ID}}" target="_blank">
                     <img src="http://localhost:8042/instances/{{s.Instances[0]}}/preview" width="256"
                         style="box-shadow:0 4px #212529, 0 -4px #212529, 4px 0 #212529, -4px 0 #212529">
+                    </a>
                 </div>
                 <div class="nes-container with-title">
                     <h4>Computed properties</h4>
-                    {% if s["fracture_ai"]["hardplaster"] | round(3) == 1.0 %}
-                        <div>Hardplaster: {{ s["fracture_ai"]["hardplaster"] | round(3) }}</div>
-                        <div>View: {{ s["fracture_ai"]["view"] }}</div>
+                    {% if s["ml_fracture"]["hardplaster"] == "yes" %}
+                        <div>Hardplaster: {{ s["ml_fracture"]["ml_fracture_hardplaster"] }}</div>
+                        <div>View: {{ s["ml_fracture"]["view"] }}</div>
                     {% else %}
-                        <div>View: {{ s["fracture_ai"]["view"] }}</div>
-                        <div>Fracture: {{ s["fracture_ai"]["fracture"] | round(3) }}</div>
+                        <div>View: {{ s["ml_fracture"]["view"] }}</div>
+                        <div>Fracture: {{ s["ml_fracture"]["fracture_probability"] | float | round(3) }}</div>
                     {% endif %}
                 </div>
                 </div>
