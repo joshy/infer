@@ -5,32 +5,26 @@
     <title>Fraktur</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{url_for('static', filename='css/tachyons.min.css') }}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/nes.min.css') }}">
-
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <style>
-        html,
-        body,
-        pre,
-        code,
-        kbd,
-        samp {
-            font-family: "Press Start 2P";
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap-theme.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/daterangepicker.css') }}">
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/moment-2.18.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/daterangepicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="w-100 mt3 nes-container is-dark">
+<body class="w-100 mt3 bg-primary">
     <h1 class="w-100 mw8 center f4" style="color:#e76e55">USB - Klinik für Radiologie und Nuklearmedizin</h1>
     <div class="w-100 b--black-10 mw8 center ">
-        <div class="nes-container is-dark with-title mt4">
+        <div class="with-title mt4">
             <h1 class="w-100 mw8 title">Distale Radiusfraktur</h1>
             <p>Dies ist ein Deep-Learning Programm zur Erkennung und Klassifizierung der distalen Radiusfraktur.
             </p>
-
-            <div class="nes-table-responsive">
-                <table class="nes-table is-bordered is-dark">
+            <input type="text" name="dates" class="">
+            <div class="">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -48,7 +42,7 @@
                             <td>{{r.MainDicomTags.AccessionNumber}}</td>
                             <td>{{r.MainDicomTags.StudyDescription}}</td>
                             <td><a href="/study?id={{r.ID}}"><button type="button"
-                                        class="nes-btn is-primary">Öffnen</button></a></td>
+                                        class="is-primary">Öffnen</button></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
